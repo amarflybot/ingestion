@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 @SpringBootApplication
@@ -22,10 +23,11 @@ public class ConsumerApplication {
 	}
 
 	@Bean
-	IntegrationFlow integrationFlow(Logger logger, ConsumerChannels channels){
+	IntegrationFlow integrationFlow(Logger logger, ConsumerChannels channels, MessageRepository repository){
 		return IntegrationFlows.from(channels.producer())
 				.handle(String.class, (payload,headers) -> {
 					logger.info("new Message: "+ payload);
+					repository.save(new Message(new Random().nextLong(), payload));
 					return null;
 				})
 				.get();

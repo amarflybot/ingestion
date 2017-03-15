@@ -22,7 +22,7 @@ public class ProducerApplication {
 
     @PostMapping("/greet/{name}")
 	public void publish(@PathVariable String name){
-		String greeting = "Hello "+name+"!";
+		String greeting = "Hello "+name+"";
         Message<String> message = MessageBuilder.withPayload(greeting).build();
         this.messageChannel.send(message);
 	}
